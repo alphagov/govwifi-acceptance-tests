@@ -2,7 +2,6 @@ setup: .frontend .authentication-api .logging-api
 
 build: setup copy-certs
 	docker-compose down
-	cp -pr ../terraform/authorised-email-domains-regex.cfg acceptance_tests/
 	docker-compose build
 	docker-compose up -d govwifi-fake-s3
 	docker-compose up -d govwifi-db-local
@@ -34,7 +33,6 @@ clean-certs:
 
 test: build
 	docker-compose up --exit-code-from govwifi-test govwifi-test
-	rm acceptance_tests/authorised-email-domains-regex.cfg
 
 destroy:
 	docker-compose down
