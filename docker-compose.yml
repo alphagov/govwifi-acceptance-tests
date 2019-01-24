@@ -1,0 +1,94 @@
+version: '3.4'
+
+services:
+  govwifi-db-local: &govwifi-db-local
+    container_name: govwifi-db-local
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: testpassword
+      MYSQL_DATABASE: govwifi_local
+    healthcheck:
+      test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
+
+  govwifi-admin-db-local: &govwifi-admin-db-local
+    container_name: govwifi-admin-db-local
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: govwifi_admin_local
+    healthcheck:
+      test: "mysql --user=root --password=root -e 'SELECT 1'"
+
+  govwifi-fake-s3:
+    build:
+      context: fake-s3
+
+  govwifi-frontend-local: &govwifi-frontend-local
+    build:
+      context: .frontend
+    depends_on:
+      - govwifi-fake-s3
+      - govwifi-authentication-api-local
+      - govwifi-logging-api-local
+    environment:
+      API_BASE_URL: "http://govwifi-authentication-api-local:8080"
+      AUTHORISATION_API_BASE_URL: "http://govwifi-authentication-api-local:8080"
+      LOGGING_API_BASE_URL: "http://govwifi-logging-api-local:8080"
+      BACKEND_API_KEY: supersecretsharedkey
+      RADIUS_CONFIG_WHITELIST_URL: "http://govwifi-fake-s3:8080/clients.conf"
+      HEALTH_CHECK_RADIUS_KEY: RrPTmh8s9NZFenAFx2kG
+      HEALTH_CHECK_SSID: GovWifi
+      HEALTH_CHECK_IDENTITY: DSLPR
+      HEALTH_CHECK_PASSWORD: SharpRegainDetailed
+      RADIUSD_PARAMS: "-X"
+      SERVICE_DOMAIN: ${SERVICE_DOMAIN:-beta.wifi}
+      CERT_STORE_URL: "http://govwifi-fake-s3:8080"
+    ports:
+      - 9090:80
+
+  govwifi-authentication-api-local:
+    build:
+      context: .authentication-api
+      args:
+        BUNDLE_INSTALL_CMD: bundle install --without test
+    image: govwifi-authentication-api/local
+    depends_on:
+      - govwifi-db-local
+    environment:
+      DB_HOSTNAME: govwifi-db-local
+      DB_USER: root
+      DB_PASS: testpassword
+      DB_NAME: govwifi_local
+
+  govwifi-logging-api-local:
+    build:
+      context: .logging-api
+      args:
+        BUNDLE_INSTALL_CMD: bundle install --without test
+    image: govwifi-logging-api/local
+    depends_on:
+      - govwifi-db-local
+    environment:
+      DB_HOSTNAME: govwifi-db-local
+      DB_USER: root
+      DB_PASS: testpassword
+      DB_NAME: govwifi_local
+
+  govwifi-test:
+    build:
+      context: acceptance_tests
+      dockerfile: Dockerfile
+    depends_on:
+      - govwifi-db-local
+      - govwifi-frontend-local
+    environment:
+      DB_HOSTNAME: govwifi-db-local
+      DB_NAME: govwifi_local
+      DB_USER: root
+      DB_PASS: testpassword
+      ENVIRONMENT_NAME: test
+      FRONTEND_API_KEY: supersecretsharedkey
+      FRONTEND_CONTAINER: govwifi-frontend-local
+      RADIUS_KEY: testingradiussecret
+      TEST_USER_NAME: GQDMK
+      TEST_USER_PASSWORD: InvestigationBurdenActually

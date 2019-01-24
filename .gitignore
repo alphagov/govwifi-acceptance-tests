@@ -1,0 +1,7 @@
+.backend
+.frontend
+.logging-api
+.authentication-api
+authorised-email-domains-regex.cfg
+acceptance_tests/.certs
+fake-s3/.certs

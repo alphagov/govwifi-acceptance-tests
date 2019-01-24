@@ -1,0 +1,7 @@
+#!/bin/bash
+
+until docker-compose exec -T govwifi-db-local mysql -hgovwifi-db-local -uroot -ptestpassword -e 'SELECT 1' &> /dev/null
+do
+  printf "."
+  sleep 1
+done
