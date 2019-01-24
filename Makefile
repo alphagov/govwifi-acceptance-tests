@@ -1,16 +1,18 @@
 setup: .frontend .authentication-api .logging-api
 
 build: setup copy-certs
+	@ # We need to do this, as we get inconsistent results when only refreshing the database.
 	docker-compose down
-	docker-compose build
-	docker-compose up -d govwifi-fake-s3
+
 	docker-compose up -d govwifi-db-local
+	docker-compose build
 	./scripts/wait_for_mysql
 	cat testdatabase/* | docker-compose run --rm govwifi-db-local mysql -uroot -hgovwifi-db-local -ptestpassword govwifi_local
-	docker-compose up -d govwifi-authentication-api-local
-	docker-compose up -d govwifi-logging-api-local
 	docker-compose up -d govwifi-frontend-local
 	$(MAKE) clean-certs
+
+test: build
+	docker-compose run govwifi-test
 
 copy-certs:
 	cp -r "test-certs" "acceptance_tests/.certs"
@@ -28,9 +30,6 @@ clean-certs:
 
 .logging-api:
 	git clone https://github.com/alphagov/govwifi-logging-api.git .logging-api
-
-test: build
-	docker-compose up --exit-code-from govwifi-test govwifi-test
 
 destroy:
 	docker-compose down
