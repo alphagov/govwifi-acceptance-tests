@@ -26,7 +26,6 @@ to end tests, and pushing up to GitHub when all passing.
 
 - `./acceptance_tests` - The Docker setup directory for the testing environment
 - `./testdatabase` - All .sql scripts inside this directory will be executed for the main database
-- `./test_admin_database` - All .sql scripts inside this directory will be executed and populate the admin database
 
 ## List of apps
 

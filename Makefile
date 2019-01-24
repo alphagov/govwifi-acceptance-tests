@@ -5,10 +5,8 @@ build: setup copy-certs
 	docker-compose build
 	docker-compose up -d govwifi-fake-s3
 	docker-compose up -d govwifi-db-local
-	docker-compose up -d govwifi-admin-db-local
 	./scripts/wait_for_mysql
 	cat testdatabase/* | docker-compose run --rm govwifi-db-local mysql -uroot -hgovwifi-db-local -ptestpassword govwifi_local
-	cat test_admin_database/* | docker-compose run --rm govwifi-admin-db-local mysql -uroot -hgovwifi-admin-db-local -proot govwifi_admin_local
 	docker-compose up -d govwifi-authentication-api-local
 	docker-compose up -d govwifi-logging-api-local
 	docker-compose up -d govwifi-frontend-local

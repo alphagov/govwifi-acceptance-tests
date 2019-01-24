@@ -2,22 +2,12 @@ version: '3.4'
 
 services:
   govwifi-db-local: &govwifi-db-local
-    container_name: govwifi-db-local
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
       MYSQL_DATABASE: govwifi_local
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
-
-  govwifi-admin-db-local: &govwifi-admin-db-local
-    container_name: govwifi-admin-db-local
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: govwifi_admin_local
-    healthcheck:
-      test: "mysql --user=root --password=root -e 'SELECT 1'"
 
   govwifi-fake-s3:
     build:
