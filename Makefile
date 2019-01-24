@@ -31,7 +31,7 @@ clean-certs:
 .logging-api:
 	git clone https://github.com/alphagov/govwifi-logging-api.git .logging-api
 
-destroy:
+destroy: .frontend .authentication-api .logging-api
 	docker-compose down
 
 clean: clean-certs
