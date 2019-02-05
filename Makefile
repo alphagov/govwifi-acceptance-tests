@@ -12,7 +12,7 @@ build: setup copy-certs
 	$(MAKE) clean-certs
 
 test: build
-	docker-compose run govwifi-test
+	docker-compose run --rm govwifi-test
 
 copy-certs:
 	cp -r "test-certs" "acceptance_tests/.certs"
