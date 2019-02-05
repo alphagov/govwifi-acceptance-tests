@@ -1,5 +1,5 @@
 
-shared_examples 'a success logger' do
+shared_examples 'a success logger' do |logged_with={}|
   # needs :db
   # needs :eapol_test_command
 
@@ -13,6 +13,12 @@ shared_examples 'a success logger' do
 
   it 'logs exactly one sessions' do
     expect(db[:sessions].count).to eq(1)
+  end
+
+  if !logged_with&.empty?
+    it 'logs with expected entries' do
+      expect(db[:sessions].first).to include logged_with
+    end
   end
 end
 
@@ -40,13 +46,13 @@ shared_examples 'set authentication context' do |configuration|
   end
 end
 
-shared_examples 'a valid auth' do |configuration|
+shared_examples 'a valid auth' do |configuration, logged_with={}|
   include_examples 'set authentication context', configuration
 
   it 'ACCEPT' do
     expect(result).to match('SUCCESS')
   end
-  it_behaves_like 'a success logger'
+  it_behaves_like 'a success logger', logged_with
 
   context 'with invalid radius secret' do
     let(:radius_key) { 'somerandomkey' }
