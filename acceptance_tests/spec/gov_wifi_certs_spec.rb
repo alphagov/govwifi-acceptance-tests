@@ -1,5 +1,3 @@
-require 'socket'
-require 'sequel'
 require 'spec_helper.rb'
 
 describe 'GovWifi Certificate Authentication' do
