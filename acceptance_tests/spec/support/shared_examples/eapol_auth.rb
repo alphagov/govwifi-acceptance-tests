@@ -16,7 +16,7 @@ shared_examples 'a success logger' do
   end
 end
 
-shared_examples 'set authentication context' do
+shared_examples 'set authentication context' do |configuration|
   # needs :db
   # needs :configuration
   # needs :frontend_container_ip
@@ -26,6 +26,7 @@ shared_examples 'set authentication context' do
     `eapol_test -t5 -c ./spec/support/#{configuration} -a #{frontend_container_ip} -s #{radius_key}`
   end
   let(:result) { eapol_test_command.split("\n").last }
+  let(:logged_with) { {} unless logged_with }
 
   before do
     db[:userdetails].insert(
@@ -39,8 +40,8 @@ shared_examples 'set authentication context' do
   end
 end
 
-shared_examples 'a valid auth' do
-  include_examples 'set authentication context'
+shared_examples 'a valid auth' do |configuration|
+  include_examples 'set authentication context', configuration
 
   it 'ACCEPT' do
     expect(result).to match('SUCCESS')
@@ -56,8 +57,8 @@ shared_examples 'a valid auth' do
   end
 end
 
-shared_examples 'an invalid auth' do
-  include_examples 'set authentication context'
+shared_examples 'an invalid auth' do |configuration|
+  include_examples 'set authentication context', configuration
 
   it 'REJECT' do
     expect(result).to eq('FAILURE')
