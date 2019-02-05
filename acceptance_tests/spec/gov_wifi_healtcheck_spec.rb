@@ -1,18 +1,17 @@
 require 'net/http'
-require 'sequel'
+require 'spec_helper.rb'
 
 describe 'GovWifi Healtcheck' do
-  let(:db) do
-    Sequel.connect(
-      adapter: 'mysql2',
-      host: ENV.fetch('DB_HOSTNAME'),
-      database: ENV.fetch('DB_NAME'),
-      user: ENV.fetch('DB_USER'),
-      password: ENV.fetch('DB_PASS')
+  before do
+    db[:userdetails].insert(
+      {
+        username: 'DSLPR',
+        contact: '+447766554430',
+        password: 'SharpRegainDetailed',
+        mobile: '+447766554430'
+      }
     )
   end
-
-  let(:frontend_container) { ENV.fetch('FRONTEND_CONTAINER') }
   let(:request) { Net::HTTP.new("#{frontend_container}", port=3000) }
 
   it 'gets a 200 from the healtcheck' do
