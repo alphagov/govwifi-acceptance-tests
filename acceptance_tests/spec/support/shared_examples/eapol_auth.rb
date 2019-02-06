@@ -29,7 +29,7 @@ shared_examples 'set authentication context' do |configuration|
   # needs :radius_key
 
   let(:eapol_test_command) do
-    `eapol_test -t5 -c ./spec/support/#{configuration} -a #{frontend_container_ip} -s #{radius_key}`
+    `eapol_test -t2 -c ./spec/support/#{configuration} -a #{frontend_container_ip} -s #{radius_key}`
   end
   let(:result) { eapol_test_command.split("\n").last }
   let(:logged_with) { {} unless logged_with }
