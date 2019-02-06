@@ -9,6 +9,15 @@ services:
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
+  govwifi-db-2-local:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: testpassword
+      MYSQL_DATABASE: govwifi_local
+    healthcheck:
+      test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
+
+
   govwifi-fake-s3:
     build:
       context: fake-s3
@@ -58,6 +67,11 @@ services:
       DB_USER: root
       DB_PASS: testpassword
       DB_NAME: govwifi_local
+      USER_DB_NAME: govwifi_local
+      USER_DB_PASS: testpassword
+      USER_DB_USER: root
+      USER_DB_HOSTNAME: govwifi-db-2-local
+
 
   govwifi-test:
     build:
