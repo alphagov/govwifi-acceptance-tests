@@ -6,6 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
       MYSQL_DATABASE: govwifi_local
+    volumes:
+      - './testdatabase:/docker-entrypoint-initdb.d:ro'
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
@@ -14,6 +16,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
       MYSQL_DATABASE: govwifi_local
+    volumes:
+      - './testdatabase:/docker-entrypoint-initdb.d:ro'
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
