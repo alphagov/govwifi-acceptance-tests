@@ -4,10 +4,11 @@ build: setup copy-certs
 	@ # We need to do this, as we get inconsistent results when only refreshing the database.
 	docker-compose down
 
-	docker-compose up -d govwifi-db-local
+	docker-compose up -d govwifi-db-local govwifi-db-2-local
 	docker-compose build
-	./scripts/wait_for_mysql
-	cat testdatabase/* | docker-compose run --rm govwifi-db-local mysql -uroot -hgovwifi-db-local -ptestpassword govwifi_local
+	./scripts/wait_for_mysql govwifi-db-local & ./scripts/wait_for_mysql govwifi-db-2-local & wait
+	cat testdatabase/* | docker-compose exec -T govwifi-db-local mysql -uroot -hgovwifi-db-local -ptestpassword govwifi_local
+	cat testdatabase/* | docker-compose exec -T govwifi-db-2-local mysql -uroot -hgovwifi-db-2-local -ptestpassword govwifi_local
 	docker-compose up -d govwifi-frontend-local
 	$(MAKE) clean-certs
 
