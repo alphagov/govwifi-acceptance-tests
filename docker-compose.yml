@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  govwifi-db-local:
+  govwifi-sessions-db:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
@@ -9,7 +9,7 @@ services:
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
-  govwifi-db-2-local:
+  govwifi-user-details-db:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
@@ -48,9 +48,9 @@ services:
       args:
         BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 8
     depends_on:
-      - govwifi-db-local
+      - govwifi-user-details-db
     environment:
-      DB_HOSTNAME: govwifi-db-local
+      DB_HOSTNAME: govwifi-user-details-db
       DB_USER: root
       DB_PASS: testpassword
       DB_NAME: govwifi_local
@@ -61,28 +61,31 @@ services:
       args:
         BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 8
     depends_on:
-      - govwifi-db-local
+      - govwifi-sessions-db
     environment:
-      DB_HOSTNAME: govwifi-db-local
+      DB_HOSTNAME: govwifi-sessions-db
       DB_USER: root
       DB_PASS: testpassword
       DB_NAME: govwifi_local
       USER_DB_NAME: govwifi_local
       USER_DB_PASS: testpassword
       USER_DB_USER: root
-      USER_DB_HOSTNAME: govwifi-db-2-local
-
+      USER_DB_HOSTNAME: govwifi-user-details-db
 
   govwifi-test:
     build:
       context: acceptance_tests
     depends_on:
-      - govwifi-db-local
+      - govwifi-sessions-db
       - govwifi-frontend-local
     environment:
-      DB_HOSTNAME: govwifi-db-local
+      DB_HOSTNAME: govwifi-sessions-db
       DB_NAME: govwifi_local
       DB_USER: root
       DB_PASS: testpassword
+      USER_DB_NAME: govwifi_local
+      USER_DB_PASS: testpassword
+      USER_DB_USER: root
+      USER_DB_HOSTNAME: govwifi-user-details-db
       FRONTEND_CONTAINER: govwifi-frontend-local
       RADIUS_KEY: testingradiussecret

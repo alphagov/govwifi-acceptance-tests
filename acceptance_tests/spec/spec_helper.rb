@@ -6,7 +6,7 @@ Dir["./spec/support/shared_examples/*.rb"].sort.each { |f| require f }
 
 module DBHelper
   extend RSpec::SharedContext
-  let(:db) do
+  let(:sessions_db) do
     Sequel.connect(
       adapter: 'mysql2',
       host: ENV.fetch('DB_HOSTNAME'),
@@ -16,9 +16,19 @@ module DBHelper
     )
   end
 
+  let(:user_details_db) do
+    Sequel.connect(
+      adapter: 'mysql2',
+      host: ENV.fetch('USER_DB_HOSTNAME'),
+      database: ENV.fetch('USER_DB_NAME'),
+      user: ENV.fetch('USER_DB_USER'),
+      password: ENV.fetch('USER_DB_PASS')
+    )
+  end
+
   before do
-    db[:userdetails].truncate
-    db[:sessions].truncate
+    sessions_db[:sessions].truncate
+    user_details_db[:userdetails].truncate
   end
 end
 

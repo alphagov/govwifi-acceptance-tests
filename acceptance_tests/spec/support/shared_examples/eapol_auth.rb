@@ -8,16 +8,16 @@ shared_examples 'a success logger' do |logged_with={}|
   end
 
   it 'logs the authentication' do
-    expect(db[:sessions].order(:id).last).to_not be_nil
+    expect(sessions_db[:sessions].order(:id).last).to_not be_nil
   end
 
   it 'logs exactly one sessions' do
-    expect(db[:sessions].count).to eq(1)
+    expect(sessions_db[:sessions].count).to eq(1)
   end
 
   if !logged_with&.empty?
     it 'logs with expected entries' do
-      expect(db[:sessions].first).to include logged_with
+      expect(sessions_db[:sessions].first).to include logged_with
     end
   end
 end
@@ -35,7 +35,7 @@ shared_examples 'set authentication context' do |configuration|
   let(:logged_with) { {} unless logged_with }
 
   before do
-    db[:userdetails].insert(
+    user_details_db[:userdetails].insert(
       {
         username: 'DSLPR',
         contact: '+447766554430',

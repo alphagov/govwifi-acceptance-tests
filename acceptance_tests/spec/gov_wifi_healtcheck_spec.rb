@@ -3,7 +3,7 @@ require 'spec_helper.rb'
 
 describe 'GovWifi Healtcheck' do
   before do
-    db[:userdetails].insert(
+    user_details_db[:userdetails].insert(
       {
         username: 'DSLPR',
         contact: '+447766554430',
