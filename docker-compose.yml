@@ -39,8 +39,6 @@ services:
       HEALTH_CHECK_PASSWORD: SharpRegainDetailed
       RADIUSD_PARAMS: "-X"
       CERT_STORE_URL: "http://govwifi-fake-s3:8080"
-    ports:
-      - 9090:80
 
   govwifi-authentication-api-local:
     build:
