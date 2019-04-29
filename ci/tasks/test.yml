@@ -3,9 +3,9 @@ platform: linux
 
 inputs:
   - name: src
-  - name: src/.frontend
-  - name: src/.authentication-api
-  - name: src/.logging-api
+  - name: frontend
+  - name: authentication-api
+  - name: logging-api
 
 params:
   ON_CONCOURSE: true

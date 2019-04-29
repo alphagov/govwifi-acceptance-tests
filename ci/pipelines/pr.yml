@@ -51,12 +51,9 @@ jobs:
             trigger: true
             version: every
           - <<: *update-status-pending
-          - get: src/.frontend
-            resource: frontend
-          - get: src/.authentication-api
-            resource: authentication-api
-          - get: src/.logging-api
-            resource: logging-api
+          - get: frontend
+          - get: authentication-api
+          - get: logging-api
         - get: runner
 
       - task: test
