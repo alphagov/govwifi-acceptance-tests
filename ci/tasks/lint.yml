@@ -1,0 +1,15 @@
+---
+platform: linux
+
+inputs: []
+
+params:
+  ON_CONCOURSE: true
+
+run:
+  path: sh
+  args:
+    - '-exc'
+    - |
+      echo "no linting configured for acceptance tests"
+
