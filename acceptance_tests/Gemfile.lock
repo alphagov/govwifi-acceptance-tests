@@ -16,7 +16,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
-    sequel (5.22.0)
+    sequel (5.23.0)
 
 PLATFORMS
   ruby
@@ -24,7 +24,7 @@ PLATFORMS
 DEPENDENCIES
   mysql2
   rspec
-  sequel (~> 5.22)
+  sequel (~> 5.23)
 
 RUBY VERSION
    ruby 2.1.5p273
