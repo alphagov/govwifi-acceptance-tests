@@ -18,10 +18,21 @@ services:
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
-
   govwifi-fake-s3:
-    build:
-      context: fake-s3
+    image: localstack/localstack
+    ports:
+      - "4572:4572"
+      - "8080:8080"
+    environment:
+      - SERVICES=s3
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEFAULT_REGION=eu-west-1
+      - AWS_ACCESS_KEY_ID=testkey
+      - AWS_SECRET_ACCESS_KEY=testsecret
+    volumes:
+      - ./fake-s3:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./fake-s3/localstack-init:/docker-entrypoint-initaws.d
 
   govwifi-frontend-local:
     build:
@@ -39,7 +50,12 @@ services:
       HEALTH_CHECK_IDENTITY: DSLPR
       HEALTH_CHECK_PASSWORD: SharpRegainDetailed
       RADIUSD_PARAMS: "-X"
-      CERT_STORE_URL: "http://govwifi-fake-s3:8080"
+      DEFAULT_REGION: eu-west-1
+      AWS_ACCESS_KEY_ID: testkey
+      AWS_SECRET_ACCESS_KEY: testsecret
+      WHITELIST_BUCKET: s3://test-bucket
+      CERT_STORE_BUCKET: s3://test-bucket
+      ENDPOINT_URL: "http://govwifi-fake-s3:4572"
 
   govwifi-authentication-api-local:
     build:
