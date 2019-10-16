@@ -108,16 +108,15 @@ jobs:
     # force people to use new git commits to rerun PRs
     disable_manual_trigger: true
     plan:
-      - aggregate:
-        - do:
-          - get: src
-            resource: pull-request
-            trigger: true
-            version: every
-          - <<: *update-status-pending
-          - get: frontend
-          - get: authentication-api
-          - get: logging-api
+      - in_parallel:
+        - get: src
+          resource: pull-request
+          trigger: true
+          version: every
+        - <<: *update-status-pending
+        - get: frontend
+        - get: authentication-api
+        - get: logging-api
         - get: runner
 
       - task: test
