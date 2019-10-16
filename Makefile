@@ -25,7 +25,7 @@ clean-certs:
 	rm -rf "fake-s3/.certs"
 
 .frontend:
-	git clone https://github.com/alphagov/govwifi-frontend.git .frontend
+	git clone --branch update_dockerfile_to_use_aws_cli https://github.com/alphagov/govwifi-frontend.git .frontend 
 
 .authentication-api:
 	git clone https://github.com/alphagov/govwifi-authentication-api.git .authentication-api
