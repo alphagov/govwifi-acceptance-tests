@@ -40,6 +40,7 @@ services:
     depends_on:
       - govwifi-authentication-api-local
       - govwifi-logging-api-local
+      - govwifi-frontend-raddb-local
     environment:
       AUTHORISATION_API_BASE_URL: "http://govwifi-authentication-api-local:8080"
       LOGGING_API_BASE_URL: "http://govwifi-logging-api-local:8080"
@@ -56,6 +57,9 @@ services:
     build:
       context: .frontend
       dockerfile: Dockerfile.raddb
+    command: tail -f /dev/null
+    healthcheck:
+      test: CMD test -f /etc/raddb/certs/server.key
     depends_on:
       - govwifi-fake-s3
     environment:

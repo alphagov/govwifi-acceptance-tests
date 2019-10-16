@@ -9,7 +9,6 @@ build: setup copy-certs
 	./scripts/wait_for_mysql govwifi-sessions-db & ./scripts/wait_for_mysql govwifi-user-details-db & wait
 	cat testdatabase/sessions.sql | docker-compose exec -T govwifi-sessions-db mysql -uroot -hgovwifi-sessions-db -ptestpassword govwifi_local
 	cat testdatabase/user_details.sql | docker-compose exec -T govwifi-user-details-db mysql -uroot -hgovwifi-user-details-db -ptestpassword govwifi_local
-	docker-compose up govwifi-frontend-raddb-local
 	docker-compose up -d govwifi-frontend-local
 	$(MAKE) clean-certs
 
