@@ -5,9 +5,5 @@ update_configs:
     update_schedule: "live"
 
   - package_manager: "docker"
-    directory: "/fake-s3"
-    update_schedule: "daily"
-
-  - package_manager: "docker"
     directory: "/acceptance_tests"
     update_schedule: "daily"
