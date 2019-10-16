@@ -38,7 +38,6 @@ services:
     build:
       context: .frontend
     depends_on:
-      - govwifi-fake-s3
       - govwifi-authentication-api-local
       - govwifi-logging-api-local
     environment:
@@ -50,12 +49,24 @@ services:
       HEALTH_CHECK_IDENTITY: DSLPR
       HEALTH_CHECK_PASSWORD: SharpRegainDetailed
       RADIUSD_PARAMS: "-X"
+    volumes:
+      - raddb-certs:/etc/raddb/certs 
+
+  govwifi-frontend-raddb-local:
+    build:
+      context: .frontend
+      dockerfile: Dockerfile.raddb
+    depends_on:
+      - govwifi-fake-s3
+    environment:
       DEFAULT_REGION: eu-west-1
       AWS_ACCESS_KEY_ID: testkey
       AWS_SECRET_ACCESS_KEY: testsecret
       WHITELIST_BUCKET: s3://test-bucket
       CERT_STORE_BUCKET: s3://test-bucket
       ENDPOINT_URL: "http://govwifi-fake-s3:4572"
+    volumes:
+      - raddb-certs:/etc/raddb/certs
 
   govwifi-authentication-api-local:
     build:
@@ -104,3 +115,6 @@ services:
       USER_DB_HOSTNAME: govwifi-user-details-db
       FRONTEND_CONTAINER: govwifi-frontend-local
       RADIUS_KEY: testingradiussecret
+
+volumes:
+  raddb-certs:
