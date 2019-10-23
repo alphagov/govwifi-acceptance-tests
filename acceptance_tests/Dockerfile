@@ -11,7 +11,7 @@ COPY Gemfile Gemfile.lock .ruby-version ./
 RUN gem update --system && gem install bundler
 RUN bundle check || bundle install
 
-COPY .certs certs
+COPY certs certs
 COPY . .
 
 CMD ["bundle", "exec", "rspec"]
