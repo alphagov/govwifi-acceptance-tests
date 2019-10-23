@@ -66,8 +66,8 @@ services:
       DEFAULT_REGION: eu-west-1
       AWS_ACCESS_KEY_ID: testkey
       AWS_SECRET_ACCESS_KEY: testsecret
-      WHITELIST_BUCKET: s3://test-bucket
-      CERT_STORE_BUCKET: s3://test-bucket
+      WHITELIST_BUCKET: s3://whitelist-bucket
+      CERT_STORE_BUCKET: s3://certs-bucket
       ENDPOINT_URL: "http://govwifi-fake-s3:4572"
     volumes:
       - raddb-certs:/etc/raddb/certs
