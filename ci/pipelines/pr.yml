@@ -105,19 +105,18 @@ jobs:
 
   - name: test
     interruptible: true
-    # force people to use new git commits to rerun PRs
-    disable_manual_trigger: true
     plan:
       - in_parallel:
         - get: src
           resource: pull-request
           trigger: true
           version: every
-        - <<: *update-status-pending
         - get: frontend
         - get: authentication-api
         - get: logging-api
         - get: runner
+
+      - <<: *update-status-pending
 
       - task: test
         privileged: true
