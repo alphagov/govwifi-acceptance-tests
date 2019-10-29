@@ -17,7 +17,7 @@ test: build
 	docker-compose run --rm govwifi-test
 
 .frontend:
-	git clone --branch update_dockerfile_to_use_aws_cli https://github.com/alphagov/govwifi-frontend.git .frontend 
+	git clone --branch spike-mutual-tls https://github.com/alphagov/govwifi-frontend.git .frontend
 
 .authentication-api:
 	git clone https://github.com/alphagov/govwifi-authentication-api.git .authentication-api

@@ -38,11 +38,10 @@ services:
     build:
       context: .frontend
     depends_on:
-      - govwifi-authentication-api-local
-      - govwifi-logging-api-local
+      - govwifi-api-proxy
     environment:
-      AUTHORISATION_API_BASE_URL: "http://govwifi-authentication-api-local:8080"
-      LOGGING_API_BASE_URL: "http://govwifi-logging-api-local:8080"
+      AUTHORISATION_API_BASE_URL: "http://govwifi-api-proxy"
+      LOGGING_API_BASE_URL: "http://govwifi-api-proxy"
       RADIUS_CONFIG_WHITELIST_URL: "http://govwifi-fake-s3:8080/clients.conf"
       HEALTH_CHECK_RADIUS_KEY: RrPTmh8s9NZFenAFx2kG
       HEALTH_CHECK_SSID: GovWifi
@@ -67,6 +66,15 @@ services:
       ENDPOINT_URL: "http://govwifi-fake-s3:4572"
     volumes:
       - raddb-certs:/etc/raddb/certs
+
+  govwifi-api-proxy:
+    image: haproxy
+    depends_on:
+      - govwifi-authentication-api-local
+      - govwifi-logging-api-local
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy
+      - ./fake-s3/certs-bucket:/etc/haproxy/cert
 
   govwifi-authentication-api-local:
     build:
