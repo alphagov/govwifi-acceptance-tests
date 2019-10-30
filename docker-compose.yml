@@ -34,15 +34,35 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./fake-s3/localstack-init:/docker-entrypoint-initaws.d
 
-  frontend-local:
-    build:
-      context: .frontend
+  api-proxy:
+    image: haproxy
     depends_on:
       - authentication-api-local
       - logging-api-local
     environment:
-      AUTHORISATION_API_BASE_URL: "http://authentication-api-local:8080"
-      LOGGING_API_BASE_URL: "http://logging-api-local:8080"
+      AUTH_API_HOST: authentication-api-local
+      LOGGING_API_HOST: logging-api-local
+    volumes:
+      - ./haproxy/api:/usr/local/etc/haproxy
+
+  radius-proxy:
+    image: haproxy
+    depends_on:
+      - api-proxy
+    environment:
+      API_AUTH: cmFkaXVzOnRvcHNlY3JldA== # echo -n "radius:topsecret" | base64
+      API_HOST: api-proxy
+    volumes:
+      - ./haproxy/radius:/usr/local/etc/haproxy
+
+  frontend-local:
+    build:
+      context: .frontend
+    depends_on:
+      - radius-proxy
+    environment:
+      AUTHORISATION_API_BASE_URL: "http://radius-proxy"
+      LOGGING_API_BASE_URL: "http://radius-proxy"
       RADIUS_CONFIG_WHITELIST_URL: "http://fake-s3:8080/clients.conf"
       HEALTH_CHECK_RADIUS_KEY: RrPTmh8s9NZFenAFx2kG
       HEALTH_CHECK_SSID: GovWifi
