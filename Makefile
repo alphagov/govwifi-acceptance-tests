@@ -4,17 +4,17 @@ build: setup
 	@ # We need to do this, as we get inconsistent results when only refreshing the database.
 	docker-compose down
 
-	docker-compose up -d govwifi-sessions-db govwifi-user-details-db govwifi-fake-s3
+	docker-compose up -d sessions-db user-details-db fake-s3
 	docker-compose build
-	./scripts/wait_for_mysql govwifi-sessions-db & ./scripts/wait_for_mysql govwifi-user-details-db & wait
-	cat testdatabase/sessions.sql | docker-compose exec -T govwifi-sessions-db mysql -uroot -hgovwifi-sessions-db -ptestpassword govwifi_local
-	cat testdatabase/user_details.sql | docker-compose exec -T govwifi-user-details-db mysql -uroot -hgovwifi-user-details-db -ptestpassword govwifi_local
-	docker-compose up govwifi-frontend-raddb-local
-	docker-compose up -d govwifi-frontend-local
+	./scripts/wait_for_mysql sessions-db & ./scripts/wait_for_mysql user-details-db & wait
+	cat testdatabase/sessions.sql | docker-compose exec -T sessions-db mysql -uroot -hsessions-db -ptestpassword govwifi_local
+	cat testdatabase/user_details.sql | docker-compose exec -T user-details-db mysql -uroot -huser-details-db -ptestpassword govwifi_local
+	docker-compose up frontend-raddb-local
+	docker-compose up -d frontend-local
 	$(MAKE) clean-certs
 
 test: build
-	docker-compose run --rm govwifi-test
+	docker-compose run --rm test
 
 .frontend:
 	git clone https://github.com/alphagov/govwifi-frontend.git .frontend

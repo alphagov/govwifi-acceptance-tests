@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  govwifi-sessions-db:
+  sessions-db:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
@@ -9,7 +9,7 @@ services:
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
-  govwifi-user-details-db:
+  user-details-db:
     image: mysql:8.0
     command: "--default-authentication-plugin=mysql_native_password"
     environment:
@@ -18,7 +18,7 @@ services:
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
-  govwifi-fake-s3:
+  fake-s3:
     image: localstack/localstack
     ports:
       - "4572:4572"
@@ -34,16 +34,16 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./fake-s3/localstack-init:/docker-entrypoint-initaws.d
 
-  govwifi-frontend-local:
+  frontend-local:
     build:
       context: .frontend
     depends_on:
-      - govwifi-authentication-api-local
-      - govwifi-logging-api-local
+      - authentication-api-local
+      - logging-api-local
     environment:
-      AUTHORISATION_API_BASE_URL: "http://govwifi-authentication-api-local:8080"
-      LOGGING_API_BASE_URL: "http://govwifi-logging-api-local:8080"
-      RADIUS_CONFIG_WHITELIST_URL: "http://govwifi-fake-s3:8080/clients.conf"
+      AUTHORISATION_API_BASE_URL: "http://authentication-api-local:8080"
+      LOGGING_API_BASE_URL: "http://logging-api-local:8080"
+      RADIUS_CONFIG_WHITELIST_URL: "http://fake-s3:8080/clients.conf"
       HEALTH_CHECK_RADIUS_KEY: RrPTmh8s9NZFenAFx2kG
       HEALTH_CHECK_SSID: GovWifi
       HEALTH_CHECK_IDENTITY: DSLPR
@@ -52,68 +52,68 @@ services:
     volumes:
       - raddb-certs:/etc/raddb/certs 
 
-  govwifi-frontend-raddb-local:
+  frontend-raddb-local:
     build:
       context: .frontend
       dockerfile: Dockerfile.raddb
     depends_on:
-      - govwifi-fake-s3
+      - fake-s3
     environment:
       DEFAULT_REGION: eu-west-1
       AWS_ACCESS_KEY_ID: testkey
       AWS_SECRET_ACCESS_KEY: testsecret
       WHITELIST_BUCKET: s3://whitelist-bucket
       CERT_STORE_BUCKET: s3://certs-bucket
-      ENDPOINT_URL: "http://govwifi-fake-s3:4572"
+      ENDPOINT_URL: "http://fake-s3:4572"
     volumes:
       - raddb-certs:/etc/raddb/certs
 
-  govwifi-authentication-api-local:
+  authentication-api-local:
     build:
       context: .authentication-api
       args:
         BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 8
     depends_on:
-      - govwifi-user-details-db
+      - user-details-db
     environment:
-      DB_HOSTNAME: govwifi-user-details-db
+      DB_HOSTNAME: user-details-db
       DB_USER: root
       DB_PASS: testpassword
       DB_NAME: govwifi_local
 
-  govwifi-logging-api-local:
+  logging-api-local:
     build:
       context: .logging-api
       args:
         BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 8
     depends_on:
-      - govwifi-sessions-db
+      - sessions-db
     environment:
-      DB_HOSTNAME: govwifi-sessions-db
+      DB_HOSTNAME: sessions-db
       DB_USER: root
       DB_PASS: testpassword
       DB_NAME: govwifi_local
       USER_DB_NAME: govwifi_local
       USER_DB_PASS: testpassword
       USER_DB_USER: root
-      USER_DB_HOSTNAME: govwifi-user-details-db
+      USER_DB_HOSTNAME: user-details-db
 
-  govwifi-test:
+  test:
     build:
       context: acceptance_tests
     depends_on:
-      - govwifi-sessions-db
-      - govwifi-frontend-local
+      - sessions-db
+      - frontend-local
     environment:
-      DB_HOSTNAME: govwifi-sessions-db
+      DB_HOSTNAME: sessions-db
       DB_NAME: govwifi_local
       DB_USER: root
       DB_PASS: testpassword
       USER_DB_NAME: govwifi_local
       USER_DB_PASS: testpassword
       USER_DB_USER: root
-      USER_DB_HOSTNAME: govwifi-user-details-db
-      FRONTEND_CONTAINER: govwifi-frontend-local
+      USER_DB_HOSTNAME: user-details-db
+      FRONTEND_CONTAINER: frontend-local
       RADIUS_KEY: testingradiussecret
 
 volumes:
