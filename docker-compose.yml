@@ -72,6 +72,9 @@ services:
     depends_on:
       - govwifi-authentication-api-local
       - govwifi-logging-api-local
+    environment:
+      AUTH_API_HOST: govwifi-authentication-api-local
+      LOGGING_API_HOST: govwifi-logging-api-local
     volumes:
       - ./haproxy:/usr/local/etc/haproxy
       - ./fake-s3/certs-bucket:/etc/haproxy/cert
