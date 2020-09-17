@@ -19,7 +19,7 @@ services:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
   govwifi-fake-s3:
-    image: localstack/localstack:0.11.4
+    image: localstack/localstack
     ports:
       - "4572:4572"
       - "8080:8080"
