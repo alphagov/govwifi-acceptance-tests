@@ -105,6 +105,7 @@ jobs:
 
   - name: test
     interruptible: true
+    max_in_flight: 1
     plan:
       - in_parallel:
         - get: src
