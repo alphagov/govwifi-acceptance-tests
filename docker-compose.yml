@@ -36,9 +36,12 @@ services:
   govwifi-frontend-local:
     build:
       context: .frontend
+      args:
+        BASE_IMAGE: "govwifi-frontend-base:latest"
     depends_on:
       - govwifi-authentication-api-local
       - govwifi-logging-api-local
+      - govwifi-frontend-base-local
     environment:
       AUTHORISATION_API_BASE_URL: "http://govwifi-authentication-api-local:8080"
       LOGGING_API_BASE_URL: "http://govwifi-logging-api-local:8080"
@@ -49,7 +52,13 @@ services:
       HEALTH_CHECK_PASSWORD: SharpRegainDetailed
       RADIUSD_PARAMS: "-X"
     volumes:
-      - raddb-certs:/etc/raddb/certs 
+      - raddb-certs:/etc/raddb/certs
+
+  govwifi-frontend-base-local:
+    build:
+      context: .frontend
+      dockerfile: Dockerfile.base
+    image: govwifi-frontend-base
 
   govwifi-frontend-raddb-local:
     build:
