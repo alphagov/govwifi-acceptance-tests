@@ -13,11 +13,6 @@ resource_types:
     repository: teliaoss/github-pr-resource
 
 resources:
-  - name: tech-ops
-    type: git
-    source:
-      uri: https://github.com/alphagov/tech-ops.git
-
   - name: govwifi-acceptance-tests
     type: git
     source:
@@ -89,19 +84,10 @@ jobs:
   - name: self-update
     serial: true
     plan:
-    - get: tech-ops
-      params:
-        submodules: none
     - get: govwifi-acceptance-tests
       trigger: true
-    - task: set-pipelines
-      file: tech-ops/ci/tasks/self-updating-pipeline.yaml
-      input_mapping: {repository: govwifi-acceptance-tests}
-      params:
-        CONCOURSE_TEAM: govwifi
-        CONCOURSE_PASSWORD: ((readonly_local_user_password))
-        PIPELINE_PATH: ci/pipelines/pr.yml
-        PIPELINE_NAME: acceptance-tests-pr
+    - set_pipeline: acceptance-tests-pr
+      file: govwifi-acceptance-tests/ci/pipelines/pr.yml
 
   - name: test
     interruptible: true
