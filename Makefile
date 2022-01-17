@@ -1,14 +1,9 @@
 setup: .frontend .authentication-api .logging-api
 
 build: setup
-	@ # We need to do this, as we get inconsistent results when only refreshing the database.
 	docker-compose down
-
-	docker-compose up -d govwifi-sessions-db govwifi-user-details-db govwifi-fake-s3
 	docker-compose build
-	./scripts/wait_for_mysql govwifi-sessions-db & ./scripts/wait_for_mysql govwifi-user-details-db & wait
 	docker-compose up govwifi-frontend-raddb-local
-	docker-compose up -d govwifi-frontend-local
 	$(MAKE) clean-certs
 
 test: build
