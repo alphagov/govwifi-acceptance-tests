@@ -1,7 +1,0 @@
-#!/bin/bash
-db_name="${1}"
-until docker-compose exec -T "${db_name}" mysql -h${db_name} -uroot -ptestpassword -e 'SELECT 1' &> /dev/null
-do
-  printf "."
-  sleep 1
-done
