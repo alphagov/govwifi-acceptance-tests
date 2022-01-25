@@ -36,7 +36,7 @@ module EnvHelper
   extend RSpec::SharedContext
   let(:frontend_container) { ENV.fetch('FRONTEND_CONTAINER') }
   let(:frontend_container_ip) do
-    TCPSocket.gethostbyname(frontend_container).last
+    Addrinfo.getaddrinfo(frontend_container, nil).first.ip_address
   end
 
   let(:radius_key) { ENV.fetch('RADIUS_KEY') }
