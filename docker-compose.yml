@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 services:
   govwifi-sessions-db:
@@ -6,6 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
       MYSQL_DATABASE: govwifi_local
+    volumes:
+      - ./init_sessions_db:/docker-entrypoint-initdb.d
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
@@ -15,6 +17,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: testpassword
       MYSQL_DATABASE: govwifi_local
+    volumes:
+      - ./init_user_details_db:/docker-entrypoint-initdb.d
     healthcheck:
       test: "mysql --user=root --password=testpassword -e 'SELECT 1'"
 
@@ -28,6 +32,8 @@ services:
       - DEFAULT_REGION=eu-west-1
       - AWS_ACCESS_KEY_ID=testkey
       - AWS_SECRET_ACCESS_KEY=testsecret
+    healthcheck:
+      test: "[ $$(AWS_ACCESS_KEY_ID=fake AWS_SECRET_ACCESS_KEY=fake aws --endpoint-url=http://localhost:4566 s3 ls certs-bucket | wc -l) -eq 9 ]"
     volumes:
       - ./fake-s3:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
@@ -37,8 +43,12 @@ services:
     build:
       context: .frontend
     depends_on:
-      - govwifi-authentication-api-local
       - govwifi-logging-api-local
+      - govwifi-authentication-api-local
+    healthcheck:
+      test: "[ $$(curl --write-out '%{http_code}' --silent --output /dev/null 127.0.0.1:3000) -eq 200 ]"
+      interval: 10s
+      retries: 30
     environment:
       AUTHORISATION_API_BASE_URL: "http://govwifi-authentication-api-local:8080"
       LOGGING_API_BASE_URL: "http://govwifi-logging-api-local:8080"
@@ -49,14 +59,15 @@ services:
       HEALTH_CHECK_PASSWORD: SharpRegainDetailed
       RADIUSD_PARAMS: "-X"
     volumes:
-      - raddb-certs:/etc/raddb/certs 
+      - raddb-certs:/etc/raddb/certs
 
   govwifi-frontend-raddb-local:
     build:
       context: .frontend
       dockerfile: Dockerfile.raddb
     depends_on:
-      - govwifi-fake-s3
+      govwifi-fake-s3:
+        condition: service_healthy
     environment:
       DEFAULT_REGION: eu-west-1
       AWS_ACCESS_KEY_ID: testkey
@@ -72,21 +83,24 @@ services:
       context: .authentication-api
       args:
         BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 8
-    depends_on:
-      - govwifi-user-details-db
     environment:
       DB_HOSTNAME: govwifi-user-details-db
       DB_USER: root
       DB_PASS: testpassword
       DB_NAME: govwifi_local
+    depends_on:
+      govwifi-sessions-db:
+        condition: service_healthy
+      govwifi-user-details-db:
+        condition: service_healthy
 
   govwifi-logging-api-local:
+    ports:
+      - "8080:8080"
     build:
       context: .logging-api
       args:
-        BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 8
-    depends_on:
-      - govwifi-sessions-db
+        BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 20 --retry 5
     environment:
       DB_HOSTNAME: govwifi-sessions-db
       DB_USER: root
@@ -96,13 +110,18 @@ services:
       USER_DB_PASS: testpassword
       USER_DB_USER: root
       USER_DB_HOSTNAME: govwifi-user-details-db
+    depends_on:
+      govwifi-sessions-db:
+        condition: service_healthy
+      govwifi-user-details-db:
+        condition: service_healthy
 
   govwifi-test:
     build:
       context: acceptance_tests
     depends_on:
-      - govwifi-sessions-db
-      - govwifi-frontend-local
+      govwifi-frontend-local:
+        condition: service_healthy
     environment:
       DB_HOSTNAME: govwifi-sessions-db
       DB_NAME: govwifi_local
