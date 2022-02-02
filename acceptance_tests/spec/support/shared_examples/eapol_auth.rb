@@ -46,6 +46,22 @@ shared_examples 'set authentication context' do |configuration|
   end
 end
 
+shared_examples 'using TLS version 1.0' do |configuration|
+  include_examples 'set authentication context', configuration
+
+  it 'uses TLS version 1.0' do
+    expect(eapol_test_command).to include('SSL: Using TLS version TLSv1')
+  end
+end
+
+shared_examples 'using TLS version 1.2' do |configuration|
+  include_examples 'set authentication context', configuration
+
+  it 'uses TLS version 1.2' do
+    expect(eapol_test_command).to include('SSL: Using TLS version TLSv1.2')
+  end
+end
+
 shared_examples 'a valid auth' do |configuration, logged_with={}|
   include_examples 'set authentication context', configuration
 
