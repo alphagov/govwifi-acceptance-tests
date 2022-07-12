@@ -52,7 +52,7 @@ services:
     environment:
       AUTHORISATION_API_BASE_URL: "http://govwifi-authentication-api-local:8080"
       LOGGING_API_BASE_URL: "http://govwifi-logging-api-local:8080"
-      RADIUS_CONFIG_WHITELIST_URL: "http://govwifi-fake-s3:4566/clients.conf"
+      RADIUS_CONFIG_ALLOWLIST_URL: "http://govwifi-fake-s3:4566/clients.conf"
       HEALTH_CHECK_RADIUS_KEY: RrPTmh8s9NZFenAFx2kG
       HEALTH_CHECK_SSID: GovWifi
       HEALTH_CHECK_IDENTITY: DSLPR
@@ -72,7 +72,7 @@ services:
       DEFAULT_REGION: eu-west-1
       AWS_ACCESS_KEY_ID: testkey
       AWS_SECRET_ACCESS_KEY: testsecret
-      WHITELIST_BUCKET: s3://whitelist-bucket
+      ALLOWLIST_BUCKET: s3://allowlist-bucket
       CERT_STORE_BUCKET: s3://certs-bucket
       ENDPOINT_URL: "http://govwifi-fake-s3:4566"
     volumes:
