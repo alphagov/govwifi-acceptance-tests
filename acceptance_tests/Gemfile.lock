@@ -27,7 +27,7 @@ DEPENDENCIES
   sequel (~> 5.66)
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 3.2.1p31
 
 BUNDLED WITH
-   2.1.4
+   2.4.6
