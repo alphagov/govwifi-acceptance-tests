@@ -37,7 +37,7 @@ services:
     volumes:
       - ./fake-s3:/var/lib/localstack
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./fake-s3/localstack-init:/docker-entrypoint-initaws.d
+      - ./fake-s3/localstack-init:/etc/localstack/init/ready.d
 
   govwifi-frontend-local:
     build:
