@@ -1,4 +1,4 @@
-FROM ruby:3.1.2-alpine
+FROM ruby:3.2.1-alpine
 
 WORKDIR /usr/src/app
 
@@ -8,8 +8,8 @@ RUN apk --no-cache add \
       ruby-dev make gcc libc-dev
 
 COPY Gemfile Gemfile.lock .ruby-version ./
-RUN gem update --system && gem install bundler
-RUN bundle check || bundle install
+
+RUN bundle install
 
 COPY certs certs
 COPY . .
