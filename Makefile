@@ -2,9 +2,8 @@ setup: .frontend .authentication-api .logging-api
 
 build: setup
 	docker-compose down
-	docker-compose build
+	docker-compose build --progress plain
 	docker-compose up govwifi-frontend-raddb-local
-	$(MAKE) clean-certs
 
 test: build
 	docker-compose run --rm govwifi-test
@@ -21,7 +20,7 @@ test: build
 destroy: .frontend .authentication-api .logging-api
 	docker-compose down --volumes
 
-clean: clean-certs
+clean:
 	rm -rf .frontend .logging-api .authentication-api
 
-.PHONY: setup build test destroy clean clean-certs
+.PHONY: setup build test destroy clean
