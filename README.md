@@ -16,6 +16,10 @@ make clean build test
 If you make changes to any of the checked out apps you will want to rerun the
 above command to rebuild and test your changes.
 
+## CI/CD
+
+The GitHub action triggered when creating a PR and the AWS CodeBuild job which runs the acceptance tests when building images for the tested apps both call `make test` to execute the tests.
+
 ## Developing within localstack
 
 When making changes to an app it is useful to keep a tight feedback loop by
