@@ -1,5 +1,5 @@
 # Local environment setup for development and testing
-
+A change
 ## Test structure
 
 Each Ruby application has its own set of unit tests which get run whenever a
