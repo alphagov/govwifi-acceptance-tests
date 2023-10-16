@@ -3,4 +3,5 @@ ruby File.read('.ruby-version').chomp
 
 gem 'mysql2'
 gem 'rspec'
+gem "rubocop-govuk"
 gem 'sequel', '~> 5.66'
