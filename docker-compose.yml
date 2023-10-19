@@ -36,7 +36,6 @@ services:
       test: "[ $$(AWS_ACCESS_KEY_ID=fake AWS_SECRET_ACCESS_KEY=fake aws --endpoint-url=http://localhost:4566 s3 ls certs-bucket | wc -l) -eq 9 ]"
     volumes:
       - ./fake-s3:/var/lib/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
       - ./fake-s3/localstack-init:/etc/localstack/init/ready.d
 
   govwifi-frontend-local:
