@@ -10,8 +10,8 @@ RUN apk --no-cache add \
 COPY Gemfile Gemfile.lock .ruby-version ./
 
 RUN bundle install
+RUN mkdir certs
 
-COPY certs certs
 COPY . .
 
 ENTRYPOINT "./run.sh"
