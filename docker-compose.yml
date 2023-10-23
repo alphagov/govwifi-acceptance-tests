@@ -33,10 +33,9 @@ services:
       - AWS_ACCESS_KEY_ID=testkey
       - AWS_SECRET_ACCESS_KEY=testsecret
     healthcheck:
-      test: "[ $$(AWS_ACCESS_KEY_ID=fake AWS_SECRET_ACCESS_KEY=fake aws --endpoint-url=http://localhost:4566 s3 ls certs-bucket | wc -l) -eq 9 ]"
+      test: "[ $$(AWS_ACCESS_KEY_ID=fake AWS_SECRET_ACCESS_KEY=fake aws --endpoint-url=http://localhost:4566 s3 ls certs-bucket | wc -l) -gt 2 ]"
     volumes:
       - ./fake-s3:/var/lib/localstack
-      - /var/run/docker.sock:/var/run/docker.sock
       - ./fake-s3/localstack-init:/etc/localstack/init/ready.d
 
   govwifi-frontend-local:
@@ -133,6 +132,11 @@ services:
       USER_DB_HOSTNAME: govwifi-user-details-db
       FRONTEND_CONTAINER: govwifi-frontend-local
       RADIUS_KEY: testingradiussecret
+      AWS_DEFAULT_REGION: eu-west-1
+      AWS_ACCESS_KEY_ID: testkey
+      AWS_SECRET_ACCESS_KEY: testsecret
+      CERT_STORE_BUCKET: s3://certs-bucket
+      ENDPOINT_URL: "http://govwifi-fake-s3:4566"
 
 volumes:
   raddb-certs:
