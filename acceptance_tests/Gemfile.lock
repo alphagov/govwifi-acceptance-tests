@@ -1,7 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (7.1.1)
+    activesupport (7.1.2)
       base64
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -12,12 +12,12 @@ GEM
       mutex_m
       tzinfo (~> 2.0)
     ast (2.4.2)
-    base64 (0.1.1)
+    base64 (0.2.0)
     bigdecimal (3.1.4)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     diff-lcs (1.5.0)
-    drb (2.1.1)
+    drb (2.2.0)
       ruby2_keywords
     govwifi_eapoltest (0.2.0)
       rspec
@@ -26,13 +26,13 @@ GEM
     json (2.6.3)
     language_server-protocol (3.17.0.3)
     minitest (5.20.0)
-    mutex_m (0.1.2)
+    mutex_m (0.2.0)
     mysql2 (0.5.5)
     parallel (1.23.0)
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
-    racc (1.7.1)
+    racc (1.7.3)
     rack (3.0.8)
     rainbow (3.1.1)
     regexp_parser (2.8.2)
@@ -41,15 +41,15 @@ GEM
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
       rspec-mocks (~> 3.12.0)
-    rspec-core (3.12.0)
+    rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.0)
+    rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.0)
+    rspec-mocks (3.12.6)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-support (3.12.0)
+    rspec-support (3.12.1)
     rubocop (1.55.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -85,23 +85,24 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    sequel (5.66.0)
+    sequel (5.74.0)
+      bigdecimal
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
 
 PLATFORMS
-  ruby
+  arm64-darwin-22
 
 DEPENDENCIES
   govwifi_eapoltest (~> 0.2.0)
   mysql2
   rspec
   rubocop-govuk
-  sequel (~> 5.66)
+  sequel
 
 RUBY VERSION
    ruby 3.2.2p53
 
 BUNDLED WITH
-   2.4.6
+   2.4.21
