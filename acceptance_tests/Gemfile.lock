@@ -85,7 +85,8 @@ GEM
       rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
-    sequel (5.66.0)
+    sequel (5.74.0)
+      bigdecimal
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
@@ -98,7 +99,7 @@ DEPENDENCIES
   mysql2
   rspec
   rubocop-govuk
-  sequel (~> 5.66)
+  sequel (~> 5.74)
 
 RUBY VERSION
    ruby 3.2.2p53
