@@ -11,10 +11,6 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          working-directory: acceptance_tests
+      - uses: actions/checkout@v3
       - name: Run tests
         run: make test
