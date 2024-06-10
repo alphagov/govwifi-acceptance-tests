@@ -73,6 +73,7 @@ services:
       AWS_SECRET_ACCESS_KEY: testsecret
       ALLOWLIST_BUCKET: s3://allowlist-bucket
       CERT_STORE_BUCKET: s3://certs-bucket
+      TRUSTED_CERTIFICATES_KEY: trusted-certificates/certificates.zip
       ENDPOINT_URL: "http://govwifi-fake-s3:4566"
     volumes:
       - raddb-certs:/etc/raddb/certs
