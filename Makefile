@@ -12,10 +12,10 @@ test: build
 	git clone https://github.com/alphagov/govwifi-frontend.git .frontend
 
 .authentication-api:
-	git clone https://github.com/alphagov/govwifi-authentication-api.git .authentication-api
+	git clone https://github.com/GovWifi/govwifi-authentication-api.git .authentication-api
 
 .logging-api:
-	git clone https://github.com/alphagov/govwifi-logging-api.git .logging-api
+	git clone https://github.com/GovWifi/govwifi-logging-api.git .logging-api
 
 destroy: .frontend .authentication-api .logging-api
 	docker compose down --volumes

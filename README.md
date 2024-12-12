@@ -42,12 +42,12 @@ These is the FreeRadius configuration, pulled from
 
 This is the Authentication API, checking user details against the Database
 
-It is pulled from the [govwifi-authentication-api](https://github.com/alphagov/govwifi-authentication-api) repository
+It is pulled from the [govwifi-authentication-api](https://github.com/GovWifi/govwifi-authentication-api) repository
 and placed into the `.authentication-api` folder.
 
 ### Logging
 
 This is the Logging API, also known as PostAuth in the Radius domain
 
-It is pulled from the [govwifi-logging-api](https://github.com/alphagov/govwifi-logging-api) repository
+It is pulled from the [govwifi-logging-api](https://github.com/GovWifi/govwifi-logging-api) repository
 and placed into the `.logging-api` folder.
