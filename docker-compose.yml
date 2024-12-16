@@ -84,6 +84,7 @@ services:
       args:
         BUNDLE_INSTALL_CMD: bundle install --without test --no-cache --jobs 8
     environment:
+      APP_ENV: production
       DB_HOSTNAME: govwifi-user-details-db
       DB_USER: root
       DB_PASS: testpassword
@@ -102,6 +103,7 @@ services:
       args:
         BUNDLE_INSTALL_CMD: bundle install --without test, vscodedev --no-cache --jobs 1 --retry 5
     environment:
+      APP_ENV: production
       DB_HOSTNAME: govwifi-sessions-db
       DB_USER: root
       DB_PASS: testpassword
