@@ -1,12 +1,12 @@
 setup: .frontend .authentication-api .logging-api
 
 build: setup
-	docker-compose down
-	docker-compose build --progress plain
-	docker-compose up govwifi-frontend-raddb-local
+	docker compose down
+	docker compose build --progress plain
+	docker compose up govwifi-frontend-raddb-local
 
 test: build
-	docker-compose run --rm govwifi-test
+	docker compose run --rm govwifi-test
 
 .frontend:
 	git clone https://github.com/alphagov/govwifi-frontend.git .frontend
@@ -18,7 +18,7 @@ test: build
 	git clone https://github.com/alphagov/govwifi-logging-api.git .logging-api
 
 destroy: .frontend .authentication-api .logging-api
-	docker-compose down --volumes
+	docker compose down --volumes
 
 clean:
 	rm -rf .frontend .logging-api .authentication-api
