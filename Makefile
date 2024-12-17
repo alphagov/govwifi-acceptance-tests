@@ -17,7 +17,7 @@ test: build
 .logging-api:
 	git clone https://github.com/alphagov/govwifi-logging-api.git .logging-api
 
-destroy: .frontend .authentication-api .logging-api
+destroy: clean
 	docker compose down --volumes
 
 clean:
